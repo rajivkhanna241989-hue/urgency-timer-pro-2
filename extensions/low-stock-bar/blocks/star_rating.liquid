@@ -1,0 +1,40 @@
+{% if product.available %}
+  {% assign inventory = product.variants.first.inventory_quantity %}
+  {% if inventory < 20 %}
+    {% assign seed = product.id | modulo: 12 %}
+    {% case seed %}
+      {% when 0 %}{% assign random_stock = 3 %}
+      {% when 1 %}{% assign random_stock = 5 %}
+      {% when 2 %}{% assign random_stock = 7 %}
+      {% when 3 %}{% assign random_stock = 4 %}
+      {% when 4 %}{% assign random_stock = 6 %}
+      {% when 5 %}{% assign random_stock = 8 %}
+      {% when 6 %}{% assign random_stock = 3 %}
+      {% when 7 %}{% assign random_stock = 9 %}
+      {% when 8 %}{% assign random_stock = 5 %}
+      {% when 9 %}{% assign random_stock = 7 %}
+      {% when 10 %}{% assign random_stock = 4 %}
+      {% when 11 %}{% assign random_stock = 6 %}
+    {% endcase %}
+
+    {% assign fill_percent = random_stock | times: 100 | divided_by: 20 %}
+
+    <div style="margin: 10px 0; font-family: inherit;">
+      <p style="font-size: 13px !important; font-weight: 700 !important; color: #c0392b !important; margin: 0 0 6px 0 !important;">
+        ⚠️ Only {{ random_stock }} left in stock — order soon!
+      </p>
+      <div style="background-color: #e0e0e0 !important; border-radius: 999px !important; height: 10px !important; width: 100% !important; overflow: hidden !important; display: block !important;">
+        <div style="background-color: #e74c3c !important; height: 10px !important; width: {{ fill_percent }}% !important; border-radius: 999px !important; display: block !important;"></div>
+      </div>
+    </div>
+
+  {% endif %}
+{% endif %}
+
+{% schema %}
+{
+  "name": "Low Stock Bar",
+  "target": "section",
+  "settings": []
+}
+{% endschema %}

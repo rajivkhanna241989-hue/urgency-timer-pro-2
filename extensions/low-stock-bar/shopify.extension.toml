@@ -1,0 +1,7 @@
+name = "low-stock-bar"
+type = "theme"
+uid = "494415ab-1315-e13d-87fa-3bb1e9f1745b37850bea"
+
+[[blocks]]
+name = "Low Stock Bar"
+target = "section"
