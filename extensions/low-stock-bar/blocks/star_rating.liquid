@@ -19,12 +19,19 @@
 
     {% assign fill_percent = random_stock | times: 100 | divided_by: 20 %}
 
+    {% assign bar_color = shop.metafields.low_stock_bar.bar_color.value | default: "#e74c3c" %}
+    {% assign text_color = shop.metafields.low_stock_bar.text_color.value | default: "#c0392b" %}
+    {% assign bar_background = shop.metafields.low_stock_bar.bar_background.value | default: "#e0e0e0" %}
+    {% assign bar_height = shop.metafields.low_stock_bar.bar_height.value | default: "10" %}
+    {% assign message_text = shop.metafields.low_stock_bar.message_text.value | default: "⚠️ Only NUMBER left in stock — order soon!" %}
+    {% assign display_message = message_text | replace: "NUMBER", random_stock %}
+
     <div style="margin: 10px 0; font-family: inherit;">
-      <p style="font-size: 13px !important; font-weight: 700 !important; color: #c0392b !important; margin: 0 0 6px 0 !important;">
-        ⚠️ Only {{ random_stock }} left in stock — order soon!
+      <p style="font-size: 13px !important; font-weight: 700 !important; color: {{ text_color }} !important; margin: 0 0 6px 0 !important;">
+        {{ display_message }}
       </p>
-      <div style="background-color: #e0e0e0 !important; border-radius: 999px !important; height: 10px !important; width: 100% !important; overflow: hidden !important; display: block !important;">
-        <div style="background-color: #e74c3c !important; height: 10px !important; width: {{ fill_percent }}% !important; border-radius: 999px !important; display: block !important;"></div>
+      <div style="background-color: {{ bar_background }} !important; border-radius: 999px !important; height: {{ bar_height }}px !important; width: 100% !important; overflow: hidden !important; display: block !important;">
+        <div style="background-color: {{ bar_color }} !important; height: {{ bar_height }}px !important; width: {{ fill_percent }}% !important; border-radius: 999px !important; display: block !important;"></div>
       </div>
     </div>
 
