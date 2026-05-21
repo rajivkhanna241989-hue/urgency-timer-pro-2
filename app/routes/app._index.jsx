@@ -5,7 +5,12 @@ import { boundary } from "@shopify/shopify-app-react-router/server";
 import { authenticate } from "../shopify.server";
 
 export const loader = async ({ request }) => {
-  const { admin } = await authenticate.admin(request);
+  const { admin, billing } = await authenticate.admin(request);
+
+  await billing.require({
+    plans: ["Pro Plan"],
+    onFailure: async () => billing.request({ plan: "Pro Plan", isTest: true }),
+  });
 
   const response = await admin.graphql(`
     #graphql
