@@ -1,11 +1,24 @@
 import { useState, useEffect } from "react";
-import { useFetcher, useLoaderData } from "react-router";
+import { useFetcher, useLoaderData, redirect } from "react-router";
 import { useAppBridge } from "@shopify/app-bridge-react";
 import { boundary } from "@shopify/shopify-app-react-router/server";
-import { authenticate } from "../shopify.server";
+import { authenticate, billing } from "../shopify.server";
+
+const PLAN_NAME = "Pro Plan";
+const PLAN_PRICE = 29.99;
 
 export const loader = async ({ request }) => {
-  const { admin } = await authenticate.admin(request);
+  const { admin, session } = await authenticate.admin(request);
+
+  const billingCheck = await billing.require({
+    request,
+    plans: [PLAN_NAME],
+    onFailure: async () => billing.request({
+      request,
+      plan: PLAN_NAME,
+      isTest: false,
+    }),
+  });
 
   const response = await admin.graphql(`
     #graphql
