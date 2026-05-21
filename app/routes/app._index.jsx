@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { useFetcher } from "react-router";
+import { useFetcher, useLoaderData } from "react-router";
 import { useAppBridge } from "@shopify/app-bridge-react";
 import { boundary } from "@shopify/shopify-app-react-router/server";
 import { authenticate } from "../shopify.server";
@@ -10,7 +10,7 @@ export const loader = async ({ request }) => {
   const response = await admin.graphql(`
     #graphql
     query {
-      currentAppInstallation {
+      shop {
         metafields(first: 10, namespace: "low_stock_bar") {
           edges {
             node {
@@ -24,7 +24,7 @@ export const loader = async ({ request }) => {
   `);
 
   const data = await response.json();
-  const metafields = data.data.currentAppInstallation.metafields.edges;
+  const metafields = data.data.shop.metafields.edges;
 
   const settings = {};
   metafields.forEach(({ node }) => {
@@ -50,17 +50,17 @@ export const action = async ({ request }) => {
   const barHeight = formData.get("barHeight");
   const messageText = formData.get("messageText");
 
-  const appInstallationResponse = await admin.graphql(`
+  const shopResponse = await admin.graphql(`
     #graphql
     query {
-      currentAppInstallation {
+      shop {
         id
       }
     }
   `);
 
-  const appInstallationData = await appInstallationResponse.json();
-  const appInstallationId = appInstallationData.data.currentAppInstallation.id;
+  const shopData = await shopResponse.json();
+  const shopId = shopData.data.shop.id;
 
   await admin.graphql(`
     #graphql
@@ -79,11 +79,11 @@ export const action = async ({ request }) => {
   `, {
     variables: {
       metafields: [
-        { ownerId: appInstallationId, namespace: "low_stock_bar", key: "bar_color", value: barColor, type: "single_line_text_field" },
-        { ownerId: appInstallationId, namespace: "low_stock_bar", key: "text_color", value: textColor, type: "single_line_text_field" },
-        { ownerId: appInstallationId, namespace: "low_stock_bar", key: "bar_background", value: barBackground, type: "single_line_text_field" },
-        { ownerId: appInstallationId, namespace: "low_stock_bar", key: "bar_height", value: barHeight, type: "single_line_text_field" },
-        { ownerId: appInstallationId, namespace: "low_stock_bar", key: "message_text", value: messageText, type: "single_line_text_field" },
+        { ownerId: shopId, namespace: "low_stock_bar", key: "bar_color", value: barColor, type: "single_line_text_field" },
+        { ownerId: shopId, namespace: "low_stock_bar", key: "text_color", value: textColor, type: "single_line_text_field" },
+        { ownerId: shopId, namespace: "low_stock_bar", key: "bar_background", value: barBackground, type: "single_line_text_field" },
+        { ownerId: shopId, namespace: "low_stock_bar", key: "bar_height", value: barHeight, type: "single_line_text_field" },
+        { ownerId: shopId, namespace: "low_stock_bar", key: "message_text", value: messageText, type: "single_line_text_field" },
       ],
     },
   });
@@ -94,24 +94,15 @@ export const action = async ({ request }) => {
 export default function Index() {
   const fetcher = useFetcher();
   const shopify = useAppBridge();
+  const loaderData = useLoaderData();
 
-  const [barColor, setBarColor] = useState("#e74c3c");
-  const [textColor, setTextColor] = useState("#c0392b");
-  const [barBackground, setBarBackground] = useState("#e0e0e0");
-  const [barHeight, setBarHeight] = useState("10");
-  const [messageText, setMessageText] = useState("⚠️ Only NUMBER left in stock — order soon!");
+  const [barColor, setBarColor] = useState(loaderData?.barColor || "#e74c3c");
+  const [textColor, setTextColor] = useState(loaderData?.textColor || "#c0392b");
+  const [barBackground, setBarBackground] = useState(loaderData?.barBackground || "#e0e0e0");
+  const [barHeight, setBarHeight] = useState(loaderData?.barHeight || "10");
+  const [messageText, setMessageText] = useState(loaderData?.messageText || "⚠️ Only NUMBER left in stock — order soon!");
 
   const isLoading = ["loading", "submitting"].includes(fetcher.state);
-
-  useEffect(() => {
-    if (fetcher.data && !fetcher.data.success) {
-      setBarColor(fetcher.data.barColor);
-      setTextColor(fetcher.data.textColor);
-      setBarBackground(fetcher.data.barBackground);
-      setBarHeight(fetcher.data.barHeight);
-      setMessageText(fetcher.data.messageText);
-    }
-  }, [fetcher.data]);
 
   useEffect(() => {
     if (fetcher.data?.success) {
