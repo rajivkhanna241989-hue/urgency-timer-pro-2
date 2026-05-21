@@ -4,8 +4,18 @@ import { useAppBridge } from "@shopify/app-bridge-react";
 import { boundary } from "@shopify/shopify-app-react-router/server";
 import { authenticate } from "../shopify.server";
 
+const PLAN_NAME = "Pro Plan";
+
 export const loader = async ({ request }) => {
-  const { admin } = await authenticate.admin(request);
+  const { admin, billing } = await authenticate.admin(request);
+
+  await billing.require({
+    plans: [PLAN_NAME],
+    onFailure: async () => billing.request({
+      plan: PLAN_NAME,
+      isTest: true,
+    }),
+  });
 
   const response = await admin.graphql(`
     #graphql
