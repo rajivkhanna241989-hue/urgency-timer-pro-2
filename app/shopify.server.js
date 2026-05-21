@@ -19,13 +19,9 @@ const shopify = shopifyApp({
   distribution: AppDistribution.AppStore,
   billing: {
     "Pro Plan": {
-      lineItems: [
-        {
-          amount: 29.99,
-          currencyCode: "USD",
-          interval: BillingInterval.Every30Days,
-        },
-      ],
+      amount: 29.99,
+      currencyCode: "USD",
+      interval: BillingInterval.Every30Days,
     },
   },
   future: {
