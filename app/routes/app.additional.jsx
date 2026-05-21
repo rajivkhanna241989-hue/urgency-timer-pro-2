@@ -10,30 +10,27 @@ export const loader = async ({ request }) => {
 
 export default function SetupInstructions() {
   const { shop } = useLoaderData();
-  const themeEditorUrl = `https://${shop}/admin/themes/current/editor?context=apps&activateAppId=f945a1f8dc845e40aa3462b5ccf13860/low-stock-bar`;
+  const themeEditorUrl = `https://${shop}/admin/themes/current/editor?template=product&addAppBlockId=494415ab-1315-e13d-87fa-3bb1e9f1745b37850bea/star_rating&target=mainSection`;
 
   return (
     <s-page heading="How to Add the Low Stock Bar to Your Store">
 
       <s-section heading="Step 1 — Open Your Theme Editor">
         <s-stack direction="block" gap="base">
-          <s-text>Click the button below to open your theme editor with the Low Stock Bar app block ready to add.</s-text>
+          <s-text>Click the button below to open your theme editor and add the Low Stock Bar directly to your product pages.</s-text>
           <s-button variant="primary" onClick={() => window.open(themeEditorUrl, "_blank")}>
-            Open Theme Editor
+            Add Low Stock Bar to Theme
           </s-button>
         </s-stack>
       </s-section>
 
-      <s-section heading="Step 2 — Add the App Block">
+      <s-section heading="Step 2 — Position the Block">
         <s-stack direction="block" gap="base">
           <s-text>Once the theme editor opens:</s-text>
           <s-stack direction="block" gap="tight">
-            <s-text>1. Navigate to a Product page template in the left sidebar</s-text>
-            <s-text>2. Click <strong>Add block</strong> or <strong>Add section</strong></s-text>
-            <s-text>3. Find <strong>Low Stock Bar</strong> under the Apps section</s-text>
-            <s-text>4. Click it to add it to your product page</s-text>
-            <s-text>5. Drag it to position it just below the product price</s-text>
-            <s-text>6. Click <strong>Save</strong> in the top right corner</s-text>
+            <s-text>1. The Low Stock Bar block will be added automatically</s-text>
+            <s-text>2. Drag it to position it just below the product price</s-text>
+            <s-text>3. Click <strong>Save</strong> in the top right corner</s-text>
           </s-stack>
         </s-stack>
       </s-section>
