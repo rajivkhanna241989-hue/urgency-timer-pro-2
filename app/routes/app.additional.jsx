@@ -10,27 +10,30 @@ export const loader = async ({ request }) => {
 
 export default function SetupInstructions() {
   const { shop } = useLoaderData();
-  const themeEditorUrl = `https://${shop}/admin/themes/current/editor?template=product&addAppBlockId=494415ab-1315-e13d-87fa-3bb1e9f1745b37850bea/star_rating&target=mainSection`;
+  const themeEditorUrl = `https://${shop}/admin/themes/current/editor?template=product`;
 
   return (
     <s-page heading="How to Add the Low Stock Bar to Your Store">
 
       <s-section heading="Step 1 — Open Your Theme Editor">
         <s-stack direction="block" gap="base">
-          <s-text>Click the button below to open your theme editor and add the Low Stock Bar directly to your product pages.</s-text>
+          <s-text>Click the button below to open your theme editor on the product page template.</s-text>
           <s-button variant="primary" onClick={() => window.open(themeEditorUrl, "_blank")}>
-            Add Low Stock Bar to Theme
+            Open Theme Editor
           </s-button>
         </s-stack>
       </s-section>
 
-      <s-section heading="Step 2 — Position the Block">
+      <s-section heading="Step 2 — Add the Low Stock Bar Block">
         <s-stack direction="block" gap="base">
           <s-text>Once the theme editor opens:</s-text>
           <s-stack direction="block" gap="tight">
-            <s-text>1. The Low Stock Bar block will be added automatically</s-text>
-            <s-text>2. Drag it to position it just below the product price</s-text>
-            <s-text>3. Click <strong>Save</strong> in the top right corner</s-text>
+            <s-text>1. In the left sidebar find the <strong>Product information</strong> section</s-text>
+            <s-text>2. Click <strong>Add block</strong></s-text>
+            <s-text>3. Scroll down to the <strong>Apps</strong> section</s-text>
+            <s-text>4. Click <strong>Low Stock Bar</strong> to add it</s-text>
+            <s-text>5. Drag it to position it just below the product price</s-text>
+            <s-text>6. Click <strong>Save</strong> in the top right corner</s-text>
           </s-stack>
         </s-stack>
       </s-section>
